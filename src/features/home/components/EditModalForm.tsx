@@ -6,6 +6,8 @@ import {
   TextField,
   Button,
   Grid,
+  InputLabel,
+  Input,
 } from "@mui/material";
 import { IIssueTrackingData } from "../../../interface/issue";
 // import EditIcon from "@mui/icons-material/Edit";
@@ -42,6 +44,17 @@ function EditModalForm({
       onSubmit(formData);
     }
     handleClose();
+  };
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        handleInputChange("inspectionImg", base64String);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -139,14 +152,13 @@ function EditModalForm({
             />
           </Grid>
           <Grid item xs={12}>
+            <InputLabel>Inspection Image</InputLabel>
             <TextField
               fullWidth
-              label="Inspection Image URL"
-              value={formData?.inspectionImg || ""}
-              onChange={(e) =>
-                handleInputChange("inspectionImg", e.target.value)
-              }
-            />
+              type="file"
+              inputProps={{ accept: "image/*" }}
+              onChange={handleImageUpload}
+            ></TextField>
           </Grid>
         </Grid>
         <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>

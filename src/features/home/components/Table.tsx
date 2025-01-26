@@ -105,12 +105,11 @@ const columns: GridColDef<IIssueTrackingData>[] = [
     type: "string",
     headerAlign: "left",
     align: "left",
+    editable: true,
     renderCell: (params) => {
       return (
-        <Link
+        <span
           style={{ width: "100%", height: "100%" }}
-          to={params.row.inspectionImg}
-          target="_blank"
           className="group relative"
         >
           <img
@@ -118,10 +117,15 @@ const columns: GridColDef<IIssueTrackingData>[] = [
             style={{ width: "100%", height: "100%" }}
             className="group-hover:opacity-0"
           />
-          <span className="absolute top-1/2 left-1/2 w-full h-full flex items-center justify-center dark:bg-slate-100/40  transform bg-slate-700/40 -translate-x-1/2 -translate-y-1/2 opacity-10 group-hover:opacity-100 transition-opacity duration-300">
+
+          <Link
+            to={params.row.inspectionImg}
+            target="_blank"
+            className="absolute top-1/2 left-1/2 w-10 h-10 flex items-center justify-center dark:bg-slate-100/40  transform bg-slate-700/40 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
             <OpenInNewIcon className="w-10 h-10 text-blue-600" />
-          </span>
-        </Link>
+          </Link>
+        </span>
       );
     },
   },
@@ -308,6 +312,7 @@ function IssueTrackingTable() {
             },
             "& .observation-column--cell": {
               textOverflow: "unset",
+              // height: "100px",
             },
           }}
         >
