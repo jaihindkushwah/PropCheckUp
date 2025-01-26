@@ -27,6 +27,7 @@ function ExportToolBar() {
           disableToolbarButton: true,
           hideFooter: true,
           hideToolbar: true,
+          fileName: "Exported Report",
           //   copyStyles: true,
           pageStyle() {
             return `
@@ -93,7 +94,7 @@ function ExportToolBar() {
       `;
           },
         }}
-      />
+      ></GridPrintExportMenuItem>
     </>
   );
 }

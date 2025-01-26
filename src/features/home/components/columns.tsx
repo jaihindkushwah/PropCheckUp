@@ -42,7 +42,6 @@ export const columns: GridColDef<IIssueTrackingData>[] = [
     align: "left",
     cellClassName: "observation-column--cell",
     width: 150,
-    // maxWidth: 700,
     flex: 1,
     editable: true,
   },
