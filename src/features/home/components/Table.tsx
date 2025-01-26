@@ -5,8 +5,13 @@ import {
   GridPaginationModel,
   GridRenderCellParams,
   GridRowId,
-  GridToolbar,
+  // GridToolbar,
+  GridToolbarColumnsButton,
   GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+  GridToolbarQuickFilter,
   GridTreeNodeWithRender,
 } from "@mui/x-data-grid";
 import { Box, Button, Fab, useTheme } from "@mui/material";
@@ -20,17 +25,41 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { createContext, useContext, useState } from "react";
 import EditModalForm from "./EditModalForm";
 
+// const dayInMonthComparator: GridComparatorFn<number> = (
+//   _v1,
+//   _v2,
+//   param1: any,
+//   param2: any
+// ) => {
+//   console.log(param1, param2);
+//   return param1.id - param2.id;
+// };
 const columns: GridColDef<IIssueTrackingData>[] = [
   {
     field: "id",
     headerName: "ID",
     flex: 0.5,
   },
+  // {
+  //   field: "id",
+  //   headerName: "Sr.No",
+  //   width: 80,
+  //   type: "number",
+  //   align: "center",
+  //   headerAlign: "center",
+  //   renderCell: (params) => {
+  //     return (
+  //       <>{params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}</>
+  //     );
+  //   },
+  //   sortComparator: dayInMonthComparator,
+  // },
   {
     field: "room",
     headerName: "Room",
     // flex: 1,
     cellClassName: "name-column--cell",
+    editable: true,
   },
   {
     field: "type",
@@ -39,6 +68,7 @@ const columns: GridColDef<IIssueTrackingData>[] = [
     headerAlign: "left",
     align: "left",
     width: 150,
+    editable: true,
   },
   {
     field: "subType",
@@ -47,6 +77,7 @@ const columns: GridColDef<IIssueTrackingData>[] = [
     headerAlign: "left",
     align: "left",
     width: 150,
+    editable: true,
   },
   {
     field: "observation",
@@ -58,6 +89,7 @@ const columns: GridColDef<IIssueTrackingData>[] = [
     minWidth: 150,
     maxWidth: 800,
     flex: 1,
+    editable: true,
   },
   {
     field: "impact",
@@ -99,6 +131,7 @@ const columns: GridColDef<IIssueTrackingData>[] = [
     type: "string",
     headerAlign: "left",
     align: "left",
+    editable: true,
   },
   {
     field: "refCode1",
@@ -106,6 +139,7 @@ const columns: GridColDef<IIssueTrackingData>[] = [
     type: "string",
     headerAlign: "left",
     align: "left",
+    editable: true,
   },
   // add action button
   {
@@ -165,7 +199,12 @@ const CustomToolbar = ({
 }) => {
   return (
     <GridToolbarContainer>
-      <GridToolbar />
+      <GridToolbarColumnsButton />
+      <GridToolbarFilterButton />
+      <GridToolbarDensitySelector />
+      <GridToolbarExport />
+
+      {/* <GridToolbar /> */}
       {selectedRows.length > 0 && (
         <Button
           color="error"
@@ -177,6 +216,7 @@ const CustomToolbar = ({
           Delete
         </Button>
       )}
+      <GridToolbarQuickFilter className="self-end justify-self-end" />
     </GridToolbarContainer>
   );
 };
