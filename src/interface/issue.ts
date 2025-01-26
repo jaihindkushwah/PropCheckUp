@@ -11,3 +11,14 @@ export interface IIssueTrackingData {
   refCode2: string;
   _id: string;
 }
+
+export interface IIssueResponseBase<T> {
+  data: T;
+  message?: string;
+  error?: string;
+}
+
+export interface IIsseResponseSingle
+  extends IIssueResponseBase<IIssueTrackingData> {}
+export interface IIsseResponseMultiple
+  extends IIssueResponseBase<IIssueTrackingData[]> {}

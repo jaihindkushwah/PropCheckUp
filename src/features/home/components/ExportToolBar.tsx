@@ -42,6 +42,7 @@ function ExportToolBar() {
         .MuiDataGrid-root {
           overflow: visible !important;
           width: 100% !important;
+          color:black !important;
         }
 
         .MuiDataGrid-columnHeader {

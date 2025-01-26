@@ -1,14 +1,13 @@
 // import * as React from 'react';
-import { DataGrid, GridPaginationModel, GridRowId } from "@mui/x-data-grid";
-import { Box, useTheme } from "@mui/material";
-import { tokens } from "../../../theme";
+import { DataGrid, GridRowId } from "@mui/x-data-grid";
+import { Box } from "@mui/material";
 import { IIssueTrackingData } from "../../../interface/issue";
-import { IssueTrackingData } from "../../../shared/data/dummyData";
 
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import EditModalForm from "./EditModalForm";
 import { CustomToolbar } from "./CustomToolbar";
 import { columns } from "./columns";
+import { useIssueTrackingTable } from "../hooks/use-issue-tracking-table";
 
 // Custom Toolbar with Delete Button
 
@@ -20,44 +19,23 @@ export const CreateTableContext = createContext({
 });
 
 function IssueTrackingTable() {
-  const [tableRows, setTableRows] =
-    useState<IIssueTrackingData[]>(IssueTrackingData);
-  const [isVirtualization, setIsVirtualization] = useState(false);
-  const [selectedEditRow, setSelectedEditRow] = useState<IIssueTrackingData>();
-  const [isModelOpen, setIsModelOpen] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<GridRowId[]>([]);
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: 10,
-  });
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete the selected rows?")) {
-      const updatedRows = tableRows.filter(
-        (row) => !selectedRows.includes(row.id)
-      );
-      setTableRows(updatedRows);
-      setSelectedRows([]);
-    }
-  };
-  const onSingleDelete = (rowId: GridRowId) => {
-    if (window.confirm("Are you sure you want to delete this row?")) {
-      const updatedRows = tableRows.filter((row) => row.id !== rowId);
-      setTableRows(updatedRows);
-    }
-  };
-  const onEditHandler = (row: IIssueTrackingData) => {
-    setIsModelOpen(true);
-    setSelectedEditRow(row);
-  };
-  const handleOnSubmit = (data: IIssueTrackingData) => {
-    const updatedRows = tableRows.map((row) =>
-      row.id === data.id ? data : row
-    );
-    setTableRows(updatedRows);
-    setIsModelOpen(false);
-  };
+  const {
+    colors,
+    isModelOpen,
+    onEditHandler,
+    onSingleDelete,
+    isVirtualization,
+    setIsVirtualization,
+    handleOnSubmit,
+    selectedEditRow,
+    selectedRows,
+    handleDelete,
+    tableRows,
+    setPaginationModel,
+    setIsModelOpen,
+    paginationModel,
+    setSelectedRows,
+  } = useIssueTrackingTable();
 
   return (
     <CreateTableContext.Provider
