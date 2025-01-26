@@ -1,238 +1,28 @@
 // import * as React from 'react';
-import {
-  DataGrid,
-  GridColDef,
-  GridPaginationModel,
-  GridRenderCellParams,
-  GridRowId,
-  // GridToolbar,
-  GridToolbarColumnsButton,
-  GridToolbarContainer,
-  GridToolbarDensitySelector,
-  GridToolbarExport,
-  GridToolbarFilterButton,
-  GridToolbarQuickFilter,
-  GridTreeNodeWithRender,
-} from "@mui/x-data-grid";
-import { Box, Button, Fab, useTheme } from "@mui/material";
+import { DataGrid, GridPaginationModel, GridRowId } from "@mui/x-data-grid";
+import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import { IIssueTrackingData } from "../../../interface/issue";
 import { IssueTrackingData } from "../../../shared/data/dummyData";
-import { Link } from "react-router-dom";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { createContext, useContext, useState } from "react";
+
+import { createContext, useState } from "react";
 import EditModalForm from "./EditModalForm";
-
-// const dayInMonthComparator: GridComparatorFn<number> = (
-//   _v1,
-//   _v2,
-//   param1: any,
-//   param2: any
-// ) => {
-//   console.log(param1, param2);
-//   return param1.id - param2.id;
-// };
-const columns: GridColDef<IIssueTrackingData>[] = [
-  {
-    field: "id",
-    headerName: "ID",
-    flex: 0.5,
-  },
-  // {
-  //   field: "id",
-  //   headerName: "Sr.No",
-  //   width: 80,
-  //   type: "number",
-  //   align: "center",
-  //   headerAlign: "center",
-  //   renderCell: (params) => {
-  //     return (
-  //       <>{params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}</>
-  //     );
-  //   },
-  //   sortComparator: dayInMonthComparator,
-  // },
-  {
-    field: "room",
-    headerName: "Room",
-    // flex: 1,
-    cellClassName: "name-column--cell",
-    editable: true,
-  },
-  {
-    field: "type",
-    headerName: "Type",
-    type: "string",
-    headerAlign: "left",
-    align: "left",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "subType",
-    headerName: "Sub Type",
-    type: "string",
-    headerAlign: "left",
-    align: "left",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "observation",
-    headerName: "Observation",
-    type: "string",
-    headerAlign: "left",
-    align: "left",
-    cellClassName: "observation-column--cell",
-    minWidth: 150,
-    maxWidth: 800,
-    flex: 1,
-    editable: true,
-  },
-  {
-    field: "impact",
-    headerName: "Impact",
-    type: "string",
-    headerAlign: "left",
-    align: "left",
-    editable: true,
-  },
-  {
-    field: "inspectionImg",
-    headerName: "Inspection Image",
-    type: "string",
-    headerAlign: "left",
-    align: "left",
-    editable: true,
-    renderCell: (params) => {
-      return (
-        <span
-          style={{ width: "100%", height: "100%" }}
-          className="group relative"
-        >
-          <img
-            src={params.row.inspectionImg}
-            style={{ width: "100%", height: "100%" }}
-            className="group-hover:opacity-0"
-          />
-
-          <Link
-            to={params.row.inspectionImg}
-            target="_blank"
-            className="absolute top-1/2 left-1/2 w-10 h-10 flex items-center justify-center dark:bg-slate-100/40  transform bg-slate-700/40 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          >
-            <OpenInNewIcon className="w-10 h-10 text-blue-600" />
-          </Link>
-        </span>
-      );
-    },
-  },
-  {
-    field: "remarks",
-    headerName: "Remarks",
-    type: "string",
-    headerAlign: "left",
-    align: "left",
-    editable: true,
-  },
-  {
-    field: "refCode1",
-    headerName: "Ref Code 1",
-    type: "string",
-    headerAlign: "left",
-    align: "left",
-    editable: true,
-  },
-  // add action button
-  {
-    field: "action",
-    headerName: "Action",
-    type: "actions",
-    headerAlign: "left",
-    align: "left",
-    flex: 1,
-    minWidth: 120,
-    renderCell: (params) => {
-      return <ActionHandler params={params} />;
-    },
-  },
-];
+import { CustomToolbar } from "./CustomToolbar";
+import { columns } from "./columns";
 
 // Custom Toolbar with Delete Button
 
-const ActionHandler = ({
-  params,
-}: {
-  params: GridRenderCellParams<
-    IIssueTrackingData,
-    any,
-    any,
-    GridTreeNodeWithRender
-  >;
-}) => {
-  const { onDelete, onEdit } = useContext(CreateTableContext);
-  return (
-    <div className="flex gap-2 px-2 w-full">
-      <Fab
-        color="secondary"
-        aria-label="edit"
-        onClick={() => onEdit(params.row)}
-        size="small"
-      >
-        <EditIcon sx={{ fontSize: "16px" }} />
-      </Fab>
-      <Fab
-        color="error"
-        aria-label="delete"
-        size="small"
-        onClick={() => onDelete(params.row.id)}
-      >
-        <DeleteIcon />
-      </Fab>
-    </div>
-  );
-};
-const CustomToolbar = ({
-  selectedRows,
-  onDelete,
-}: {
-  selectedRows: GridRowId[];
-  onDelete?: () => void;
-}) => {
-  return (
-    <GridToolbarContainer>
-      <GridToolbarColumnsButton />
-      <GridToolbarFilterButton />
-      <GridToolbarDensitySelector />
-      <GridToolbarExport />
-
-      {/* <GridToolbar /> */}
-      {selectedRows.length > 0 && (
-        <Button
-          color="error"
-          variant="text"
-          startIcon={<DeleteIcon />}
-          onClick={onDelete}
-          disabled={selectedRows.length === 0} // Disable button if no rows are selected
-        >
-          Delete
-        </Button>
-      )}
-      <GridToolbarQuickFilter className="self-end justify-self-end" />
-    </GridToolbarContainer>
-  );
-};
-
-const CreateTableContext = createContext({
+export const CreateTableContext = createContext({
   onDelete: (_rowId: GridRowId) => {},
   onEdit: (_row: IIssueTrackingData) => {},
+  isVirtualization: false,
+  setIsVirtualization: (_value: boolean) => {},
 });
 
 function IssueTrackingTable() {
   const [tableRows, setTableRows] =
     useState<IIssueTrackingData[]>(IssueTrackingData);
+  const [isVirtualization, setIsVirtualization] = useState(false);
   const [selectedEditRow, setSelectedEditRow] = useState<IIssueTrackingData>();
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [selectedRows, setSelectedRows] = useState<GridRowId[]>([]);
@@ -271,7 +61,12 @@ function IssueTrackingTable() {
 
   return (
     <CreateTableContext.Provider
-      value={{ onDelete: onSingleDelete, onEdit: onEditHandler }}
+      value={{
+        onDelete: onSingleDelete,
+        onEdit: onEditHandler,
+        isVirtualization,
+        setIsVirtualization,
+      }}
     >
       {isModelOpen && (
         <EditModalForm
@@ -317,6 +112,7 @@ function IssueTrackingTable() {
           }}
         >
           <DataGrid
+            disableVirtualization={!isVirtualization}
             rows={tableRows}
             columns={columns}
             checkboxSelection

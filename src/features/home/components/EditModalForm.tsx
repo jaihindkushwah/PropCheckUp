@@ -7,7 +7,7 @@ import {
   Button,
   Grid,
   InputLabel,
-  Input,
+  // Input,
 } from "@mui/material";
 import { IIssueTrackingData } from "../../../interface/issue";
 // import EditIcon from "@mui/icons-material/Edit";
@@ -50,8 +50,12 @@ function EditModalForm({
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result as string;
-        handleInputChange("inspectionImg", base64String);
+        // const base64String = reader.result as string;
+        // const imageUrl = URL.createObjectURL(file); // Generate URL for the uploaded image
+        // const imageUrl=reader
+        // setImageURL(imageUrl);
+        const imageUrl = URL.createObjectURL(file);
+        handleInputChange("inspectionImg", imageUrl);
       };
       reader.readAsDataURL(file);
     }
