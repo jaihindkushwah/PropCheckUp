@@ -16,6 +16,9 @@ export interface IIssueResponseBase<T> {
   data: T;
   message?: string;
   error?: string;
+  currentPage?: number;
+  pageSize?: number;
+  success?: boolean;
 }
 
 export interface IIsseResponseSingle

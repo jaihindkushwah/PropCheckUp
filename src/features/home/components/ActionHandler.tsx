@@ -3,10 +3,10 @@
 import { GridRenderCellParams, GridTreeNodeWithRender } from "@mui/x-data-grid";
 import { IIssueTrackingData } from "../../../interface/issue";
 import { useContext } from "react";
-import { CreateTableContext } from "./Table";
 import { Fab } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { CreateTableContext } from "../context/CreateTableContext";
 
 export const ActionHandler = ({
   params,
@@ -33,7 +33,7 @@ export const ActionHandler = ({
         color="error"
         aria-label="delete"
         size="small"
-        onClick={() => onDelete(params.row.id)}
+        onClick={() => onDelete(params.row.id, params.row._id)}
       >
         <DeleteIcon />
       </Fab>

@@ -6,7 +6,7 @@ import { IIssueTrackingData } from "../../../interface/issue";
 export const columns: GridColDef<IIssueTrackingData>[] = [
   {
     field: "id",
-    headerName: "ID",
+    headerName: "Sr. No.",
     flex: 0.3,
   },
   {

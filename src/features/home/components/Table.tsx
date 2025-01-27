@@ -1,22 +1,14 @@
 // import * as React from 'react';
-import { DataGrid, GridRowId } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
-import { IIssueTrackingData } from "../../../interface/issue";
-
-import { createContext } from "react";
 import EditModalForm from "./EditModalForm";
 import { CustomToolbar } from "./CustomToolbar";
 import { columns } from "./columns";
 import { useIssueTrackingTable } from "../hooks/use-issue-tracking-table";
+import { CreateTableContext } from "../context/CreateTableContext";
+import { IIssueTrackingData } from "../../../interface/issue";
 
 // Custom Toolbar with Delete Button
-
-export const CreateTableContext = createContext({
-  onDelete: (_rowId: GridRowId) => {},
-  onEdit: (_row: IIssueTrackingData) => {},
-  isVirtualization: false,
-  setIsVirtualization: (_value: boolean) => {},
-});
 
 function IssueTrackingTable() {
   const {
@@ -26,7 +18,7 @@ function IssueTrackingTable() {
     onSingleDelete,
     isVirtualization,
     setIsVirtualization,
-    handleOnSubmit,
+    handleEditOnSubmit,
     selectedEditRow,
     selectedRows,
     handleDelete,
@@ -51,7 +43,7 @@ function IssueTrackingTable() {
           open={true}
           rowData={selectedEditRow}
           setOpen={setIsModelOpen}
-          onSubmit={handleOnSubmit}
+          onSubmit={handleEditOnSubmit}
         />
       )}
       <Box m="20px">
@@ -100,8 +92,14 @@ function IssueTrackingTable() {
             onPaginationModelChange={(newModel) => {
               setPaginationModel(newModel);
             }}
-            onRowSelectionModelChange={(row) => {
-              setSelectedRows([...row]);
+            onRowSelectionModelChange={(_row, details) => {
+              setSelectedRows([
+                ...details.api.getSelectedRows().values(),
+              ] as IIssueTrackingData[]);
+            }}
+            processRowUpdate={(row) => {
+              console.log(row);
+              return row;
             }}
             pagination
             slots={{

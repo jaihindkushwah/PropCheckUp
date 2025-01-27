@@ -11,11 +11,12 @@ import {
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ExportToolBar from "./ExportToolBar";
+import { IIssueTrackingData } from "../../../interface/issue";
 export const CustomToolbar = ({
   selectedRows,
   onDelete,
 }: {
-  selectedRows: GridRowId[];
+  selectedRows: IIssueTrackingData[];
   onDelete?: () => void;
 }) => {
   return (

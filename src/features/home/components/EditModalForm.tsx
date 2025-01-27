@@ -1,6 +1,5 @@
 import {
   Box,
-  //   Fab,
   Modal,
   Typography,
   TextField,
@@ -10,8 +9,9 @@ import {
   // Input,
 } from "@mui/material";
 import { IIssueTrackingData } from "../../../interface/issue";
-// import EditIcon from "@mui/icons-material/Edit";
+
 import { useState } from "react";
+import { uploadImage } from "../../../services/uploadApi";
 
 interface EditModalFormProps {
   rowData?: IIssueTrackingData;
@@ -26,38 +26,48 @@ function EditModalForm({
   rowData,
   onSubmit,
 }: EditModalFormProps) {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<IIssueTrackingData | undefined>(
     rowData
   );
-
   const handleClose = () => setOpen && setOpen(false);
-
   const handleInputChange = (
     field: keyof IIssueTrackingData,
     value: string
   ) => {
     setFormData((prev) => prev && { ...prev, [field]: value });
   };
-
   const handleSubmit = () => {
     if (formData && onSubmit) {
       onSubmit(formData);
     }
     handleClose();
   };
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files && event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // const base64String = reader.result as string;
-        // const imageUrl = URL.createObjectURL(file); // Generate URL for the uploaded image
-        // const imageUrl=reader
-        // setImageURL(imageUrl);
-        const imageUrl = URL.createObjectURL(file);
-        handleInputChange("inspectionImg", imageUrl);
-      };
-      reader.readAsDataURL(file);
+    try {
+      setLoading(true);
+      if (file) {
+        const response = await uploadImage(file);
+        const data = await response.json();
+        console.log(data);
+        handleInputChange("inspectionImg", data.url);
+
+        // reader.onloadend = () => {
+        //   // const base64String = reader.result as string;
+        //   // const imageUrl = URL.createObjectURL(file); // Generate URL for the uploaded image
+        //   // const imageUrl=reader
+        //   // setImageURL(imageUrl);
+        //   const imageUrl = URL.createObjectURL(file);
+        // };
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading image. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,7 +179,12 @@ function EditModalForm({
           <Button variant="outlined" color="error" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Button
+            loading={loading}
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+          >
             Save
           </Button>
         </Box>

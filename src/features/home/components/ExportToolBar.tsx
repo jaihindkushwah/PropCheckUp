@@ -2,8 +2,8 @@ import {
   GridCsvExportMenuItem,
   GridPrintExportMenuItem,
 } from "@mui/x-data-grid";
-import { CreateTableContext } from "./Table";
 import { useCallback, useContext } from "react";
+import { CreateTableContext } from "../context/CreateTableContext";
 
 function ExportToolBar() {
   const { setIsVirtualization } = useContext(CreateTableContext);
