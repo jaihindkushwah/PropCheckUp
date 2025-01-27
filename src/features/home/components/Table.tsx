@@ -98,7 +98,7 @@ function IssueTrackingTable() {
               ] as IIssueTrackingData[]);
             }}
             processRowUpdate={(row) => {
-              console.log(row);
+              handleEditOnSubmit(row);
               return row;
             }}
             pagination
